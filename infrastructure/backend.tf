@@ -4,7 +4,4 @@ terraform {
     key    = "discography-api"
     region = "eu-west-1"
   }
-
-
-
 }
