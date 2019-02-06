@@ -20,5 +20,5 @@ before_script:
   - chmod +x ${HOME}/bin/terraform
   - rm -f terraform.zip
 script:
-  - cd infrastructure && terraform fmt -check=true
+  - terraform fmt -check=true infrastructure
   - sbt ++$TRAVIS_SCALA_VERSION test
