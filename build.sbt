@@ -10,8 +10,13 @@ scalaVersion := "2.12.8"
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.1" % Test
 
-// Adds additional packages into Twirl
-//TwirlKeys.templateImports += "uk.co.chriswilding.controllers._"
+wartremoverErrors in Compile ++= Warts.unsafe
+wartremoverExcluded ++= routes.in(Compile).value
 
-// Adds additional packages into conf/routes
-// play.sbt.routes.RoutesKeys.routesImport += "uk.co.chriswilding.binders._"
+val disabledInTestWarts = Seq("NonUnitStatements", "OptionPartial")
+
+scalacOptions in Test ~= {
+  val disabledInTestWartsFlags =
+    disabledInTestWarts.map(wart => s"-P:wartremover:traverser:org.wartremover.warts.$wart")
+  _.filterNot(s => disabledInTestWartsFlags.contains(s))
+}
