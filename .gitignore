@@ -1,8 +1,9 @@
-logs
-target
+/.classpath
 /.idea
 /.idea_modules
-/.classpath
 /.project
 /.settings
 /RUNNING_PID
+infrastructure/.terraform
+logs
+target
