@@ -21,4 +21,4 @@ before_script:
   - rm -f terraform.zip
 script:
   - terraform fmt -check=true infrastructure
-  - sbt ++$TRAVIS_SCALA_VERSION test
+  - sbt ++$TRAVIS_SCALA_VERSION scalafmtCheck scalafmtSbtCheck test
