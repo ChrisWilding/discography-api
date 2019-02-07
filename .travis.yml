@@ -4,6 +4,8 @@ scala:
 jdk:
   - openjdk8
 sudo: false
+services:
+  - docker
 before_cache:
   - rm -fv $HOME/.ivy2/.sbt.ivy.lock
   - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
@@ -22,3 +24,7 @@ before_script:
 script:
   - terraform fmt -check=true infrastructure
   - sbt ++$TRAVIS_SCALA_VERSION scalafmtCheck scalafmtSbtCheck test
+deploy:
+  on: master
+  provider: script
+  script: sh build.sh
