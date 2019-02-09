@@ -58,23 +58,17 @@ scalacOptions ++= Seq(
 
 scalacOptions in (Compile, console) --= Seq("-Ywarn-unused:imports", "-Xfatal-warnings")
 
-val disabledInTestWarts = Seq("NonUnitStatements", "OptionPartial")
-
-scalacOptions in Test ~= {
-  val disabledInTestWartsFlags =
-    disabledInTestWarts.map(wart => s"-P:wartremover:traverser:org.wartremover.warts.$wart")
-  _.filterNot(s => disabledInTestWartsFlags.contains(s))
-}
-
 autoCompilerPlugins := true
 addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.2.4")
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
 
-libraryDependencies += guice
-libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.1" % Test
-
-wartremoverErrors in Compile ++= Warts.unsafe
-wartremoverExcluded ++= routes.in(Compile).value
+libraryDependencies ++= Seq(
+  guice,
+  "org.sangria-graphql" %% "sangria" % "1.4.2",
+  "org.sangria-graphql" %% "sangria-play-json" % "1.0.4",
+  "org.sangria-graphql" %% "sangria-relay" % "1.4.2",
+  "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.1" % Test
+)
 
 mainClass in assembly := Some("play.core.server.ProdServerStart")
 fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value)
