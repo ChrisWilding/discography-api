@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk
+FROM openjdk:11
 
 ENV SBT_VERSION 1.2.8
 ENV SCALA_VERSION 2.12.8
@@ -26,7 +26,7 @@ COPY ["public", "public"]
 RUN sbt assembly
 
 
-FROM gcr.io/distroless/java
+FROM gcr.io/distroless/java:11
 
 WORKDIR "/discography"
 
