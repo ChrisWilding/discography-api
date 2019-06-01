@@ -1,18 +1,17 @@
 package controllers
 
 import javax.inject._
+import models.{DiscographyRepo, SchemaDefinition}
+import play.api.libs.json._
+import play.api.mvc._
+import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError}
+import sangria.marshalling.playJson._
+import sangria.parser.{QueryParser, SyntaxError}
+import sangria.renderer.SchemaRenderer
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
-
-import play.api.libs.json._
-import play.api.mvc._
-import sangria.execution.{ErrorWithResolver, QueryAnalysisError, Executor}
-import sangria.parser.{SyntaxError, QueryParser}
-import sangria.marshalling.playJson._
-import sangria.renderer.SchemaRenderer
-
-import models.{DiscographyRepo, SchemaDefinition}
 
 @Singleton
 class GraphQLController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
@@ -38,9 +37,11 @@ class GraphQLController @Inject()(cc: ControllerComponents) extends AbstractCont
     Ok(SchemaRenderer.renderSchema(SchemaDefinition.schema))
   }
 
-  private def executeQuery(query: String,
-                           variables: Option[JsObject],
-                           operation: Option[String]) = {
+  private def executeQuery(
+      query: String,
+      variables: Option[JsObject],
+      operation: Option[String]
+  ) = {
     QueryParser.parse(query) match {
       case Success(queryAst) =>
         Executor
@@ -53,8 +54,8 @@ class GraphQLController @Inject()(cc: ControllerComponents) extends AbstractCont
           )
           .map(Ok(_))
           .recover {
-            case error: QueryAnalysisError ⇒ BadRequest(error.resolveError)
-            case error: ErrorWithResolver ⇒ InternalServerError(error.resolveError)
+            case error: QueryAnalysisError => BadRequest(error.resolveError)
+            case error: ErrorWithResolver  => InternalServerError(error.resolveError)
           }
 
       case Failure(error: SyntaxError) =>
@@ -62,11 +63,17 @@ class GraphQLController @Inject()(cc: ControllerComponents) extends AbstractCont
           BadRequest(
             Json.obj(
               "syntaxError" -> error.getMessage,
-              "locations" -> Json.arr(Json.obj("line" -> error.originalError.position.line,
-                                               "column" -> error.originalError.position.column))
-            )))
+              "locations" -> Json.arr(
+                Json.obj(
+                  "line" -> error.originalError.position.line,
+                  "column" -> error.originalError.position.column
+                )
+              )
+            )
+          )
+        )
 
-      case Failure(error) ⇒
+      case Failure(error) =>
         throw error
     }
   }
