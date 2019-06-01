@@ -5,3 +5,4 @@
 GET     /graphql                    controllers.GraphQLController.graphql(query: String, variables: Option[String], operation: Option[String])
 POST    /graphql                    controllers.GraphQLController.graphqlBody
 GET     /render-schema              controllers.GraphQLController.renderSchema
+

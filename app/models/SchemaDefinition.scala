@@ -1,8 +1,8 @@
 package models
 
-import sangria.schema._
-import sangria.relay._
 import models.DiscographyData._
+import sangria.relay._
+import sangria.schema._
 
 object SchemaDefinition {
   val NodeDefinition(nodeInterface, nodeField, nodesField) =
@@ -41,10 +41,12 @@ object SchemaDefinition {
     interfaces[DiscographyRepo, Artist](nodeInterface),
     fields[DiscographyRepo, Artist](
       Node.globalIdField[DiscographyRepo, Artist],
-      Field("name",
-            OptionType(StringType),
-            Some("The name of the artist."),
-            resolve = _.value.name),
+      Field(
+        "name",
+        OptionType(StringType),
+        Some("The name of the artist."),
+        resolve = _.value.name
+      ),
       Field(
         "albums",
         OptionType(albumConnection),
@@ -60,13 +62,17 @@ object SchemaDefinition {
   val QueryType = ObjectType(
     "Query",
     fields[DiscographyRepo, Unit](
-      Field("artists",
-            ListType(OptionType(ArtistType)),
-            arguments = namesArgument :: Nil,
-            resolve = ctx => ctx.ctx.getArtists(ctx.arg(namesArgument))),
-      Field("christineAndTheQueens",
-            OptionType(ArtistType),
-            resolve = _.ctx.getChristineAndTheQueens),
+      Field(
+        "artists",
+        ListType(OptionType(ArtistType)),
+        arguments = namesArgument :: Nil,
+        resolve = ctx => ctx.ctx.getArtists(ctx.arg(namesArgument))
+      ),
+      Field(
+        "christineAndTheQueens",
+        OptionType(ArtistType),
+        resolve = _.ctx.getChristineAndTheQueens
+      ),
       Field("theXX", OptionType(ArtistType), resolve = _.ctx.getTheXX),
       nodeField,
       nodesField
