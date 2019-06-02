@@ -8,7 +8,9 @@ import slick.jdbc.JdbcProfile
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class HelloController @Inject()(cc: ControllerComponents, dbConfigProviders: DatabaseConfigProvider)(implicit ec: ExecutionContext) extends AbstractController(cc) {
+class HelloController @Inject()(cc: ControllerComponents, dbConfigProviders: DatabaseConfigProvider)(
+    implicit ec: ExecutionContext
+) extends AbstractController(cc) {
   val defaultDbConfig = dbConfigProviders.get[JdbcProfile]
   import defaultDbConfig.profile.api._
 
