@@ -27,4 +27,4 @@ script:
 deploy:
   on: master
   provider: script
-  script: sh build.sh
+  script: sh ops/build.sh
