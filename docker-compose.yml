@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  api:
+    build: .
+    environment:
+      DATABASE_URL: "postgres://discography:discography@localhost:5432/discography"
+    links:
+      - postgres
+    ports:
+      - "9000:9000"
+
+  postgres:
+    environment:
+      POSTGRES_DB: "discography"
+      POSTGRES_PASSWORD: "discography"
+      POSTGRES_USER: "discography"
+    image: postgres:11
+    ports:
+      - "5432:5432"
+

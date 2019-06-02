@@ -64,6 +64,11 @@ addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
 
 libraryDependencies ++= Seq(
   guice,
+  "com.typesafe.play" %% "play-slick" % "4.0.0",
+  "com.typesafe.play" %% "play-slick-evolutions" % "4.0.0",
+  "com.typesafe.slick" %% "slick" % "3.3.0",
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.3.0",
+  "org.postgresql" % "postgresql" % "42.2.5",
   "org.sangria-graphql" %% "sangria" % "1.4.2",
   "org.sangria-graphql" %% "sangria-play-json" % "1.0.5",
   "org.sangria-graphql" %% "sangria-relay" % "1.4.2",
