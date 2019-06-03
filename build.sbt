@@ -1,5 +1,8 @@
+import play.sbt.routes.RoutesKeys
+
 name := """discography"""
 organization := "uk.co.chriswilding"
+maintainer := "hello@chriswilding.co.uk"
 
 version := "1.0-SNAPSHOT"
 
@@ -19,7 +22,7 @@ scalacOptions ++= Seq(
   "-language:implicitConversions",
   "-unchecked",
   "-Xcheckinit",
-  // "-Xfatal-warnings",
+  "-Xfatal-warnings",
   "-Xfuture",
   "-Xlint:adapted-args",
   "-Xlint:by-name-right-associative",
@@ -91,3 +94,5 @@ assemblyMergeStrategy in assembly := {
 assemblyJarName in assembly := "discography.jar"
 
 test in assembly := {}
+
+RoutesKeys.routesImport := Seq.empty
