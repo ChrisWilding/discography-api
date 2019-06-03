@@ -5,7 +5,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc._
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class HelloController @Inject()(cc: ControllerComponents, dbConfigProviders: DatabaseConfigProvider)(
