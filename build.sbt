@@ -62,20 +62,20 @@ scalacOptions ++= Seq(
 scalacOptions in (Compile, console) --= Seq("-Ywarn-unused:imports", "-Xfatal-warnings")
 
 autoCompilerPlugins := true
-addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.2.4")
-addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.6")
+addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.0")
+addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.10")
 
 libraryDependencies ++= Seq(
   guice,
-  "com.typesafe.play" %% "play-slick" % "4.0.0",
-  "com.typesafe.play" %% "play-slick-evolutions" % "4.0.0",
-  "com.typesafe.slick" %% "slick" % "3.3.0",
-  "com.typesafe.slick" %% "slick-hikaricp" % "3.3.0",
-  "org.postgresql" % "postgresql" % "42.2.5",
+  "com.typesafe.play" %% "play-slick" % "4.0.2",
+  "com.typesafe.play" %% "play-slick-evolutions" % "4.0.2",
+  "com.typesafe.slick" %% "slick" % "3.3.2",
+  "com.typesafe.slick" %% "slick-hikaricp" % "3.3.2",
+  "org.postgresql" % "postgresql" % "42.2.6",
   "org.sangria-graphql" %% "sangria" % "1.4.2",
   "org.sangria-graphql" %% "sangria-play-json" % "1.0.5",
   "org.sangria-graphql" %% "sangria-relay" % "1.4.2",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.2" % Test
+  "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % Test
 )
 
 mainClass in assembly := Some("play.core.server.ProdServerStart")
