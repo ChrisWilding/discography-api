@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM adoptopenjdk/openjdk11:slim
 
 ENV SBT_VERSION 1.2.8
 ENV SCALA_VERSION 2.12.8
@@ -26,9 +26,9 @@ COPY ["public", "public"]
 RUN sbt assembly
 
 
-FROM gcr.io/distroless/java:11
+FROM adoptopenjdk/openjdk11:slim
 
 WORKDIR "/discography"
 
 COPY --from=0 /discography/target/scala-*/discography.jar .
-CMD ["discography.jar"]
+CMD ["java", "-jar", "discography.jar"]
