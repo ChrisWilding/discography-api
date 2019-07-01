@@ -13,6 +13,14 @@ services:
     ports:
       - "9000:9000"
 
+  flyway:
+    image: boxfuse/flyway:5-alpine
+    command: -url=jdbc:postgresql://postgres:5432/discography -user=discography -password=discography migrate
+    volumes:
+      - .:/flyway/sql
+    depends_on:
+      - postgres
+
   postgres:
     environment:
       POSTGRES_DB: "discography"
@@ -21,4 +29,3 @@ services:
     image: postgres:11-alpine
     ports:
       - "5432:5432"
-
