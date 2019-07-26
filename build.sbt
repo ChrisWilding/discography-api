@@ -62,8 +62,8 @@ scalacOptions ++= Seq(
 scalacOptions in (Compile, console) --= Seq("-Ywarn-unused:imports", "-Xfatal-warnings")
 
 autoCompilerPlugins := true
-addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.0")
-addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.10")
+addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
+addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
 
 libraryDependencies ++= Seq(
   guice,
