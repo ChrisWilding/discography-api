@@ -5,6 +5,9 @@ services:
     build: .
     environment:
       DATABASE_URL: "postgres://discography:discography@localhost:5432/discography"
+      # This PLAY_HTTP_SECRET_KEY is only used in docker-compose and is different to the one used on
+      # Heroku
+      PLAY_HTTP_SECRET_KEY: "3oO>nb4L5p4n4kj8Pt^Wjvo0]2Z0oyP1tUtzM[Y1A8<nv3^n>;1i`e`p<]5U7qEX"
     links:
       - postgres
     ports:
@@ -15,7 +18,7 @@ services:
       POSTGRES_DB: "discography"
       POSTGRES_PASSWORD: "discography"
       POSTGRES_USER: "discography"
-    image: postgres:11
+    image: postgres:11-alpine
     ports:
       - "5432:5432"
 

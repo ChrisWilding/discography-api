@@ -3,8 +3,8 @@ FROM adoptopenjdk/openjdk11:slim
 WORKDIR "/discography"
 
 RUN mkdir project
-COPY ["project/assembly.sbt", "project/build.properties", "project/plugins.sbt", "./project/"]
 COPY ["build.sbt", "./"]
+COPY ["project/assembly.sbt", "project/build.properties", "project/plugins.sbt", "./project/"]
 
 ENV SBT_VERSION 1.2.8
 
