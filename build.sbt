@@ -51,7 +51,7 @@ scalacOptions ++= Seq(
   "-Ywarn-nullary-unit",
   "-Ywarn-numeric-widen",
   "-Ywarn-unused:implicits",
-  "-Ywarn-unused:imports",
+//  "-Ywarn-unused:imports",
   "-Ywarn-unused:locals",
   "-Ywarn-unused:params",
   "-Ywarn-unused:patvars",
@@ -59,7 +59,7 @@ scalacOptions ++= Seq(
   "-Ywarn-value-discard"
 )
 
-scalacOptions in (Compile, console) --= Seq("-Ywarn-unused:imports", "-Xfatal-warnings")
+//scalacOptions in (Compile, console) --= Seq("-Ywarn-unused:imports", "-Xfatal-warnings")
 
 autoCompilerPlugins := true
 addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
