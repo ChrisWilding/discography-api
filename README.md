@@ -1,8 +1,13 @@
 # Discography API [![Build Status](https://travis-ci.com/ChrisWilding/discography-api.svg?branch=master)](https://travis-ci.com/ChrisWilding/discography-api)
 
-A GraphQL API for discography.
+A GraphQL API for discography. You can try it out [here](http://cw-discography-api.herokuapp.com/playground).
 
-You can try it out [here](http://cw-discography-api.herokuapp.com/graphql).
+## Routes
+
+* `GET /graphql` - Submit a GraphQL query using a HTTP GET request, see [here](https://graphql.org/learn/serving-over-http/) for more information
+* `POST /graphql` - Submit a GraphQL query using a HTTP POST request, see [here](https://graphql.org/learn/serving-over-http/) for more information
+* `GET /playground` - A GraphQL IDE
+* `GET /schema` - The Discography GraphQL schema
 
 ## Prerequisites
 

@@ -33,7 +33,7 @@ class GraphQLController @Inject()(cc: ControllerComponents) extends AbstractCont
     executeQuery(query, variables, operation)
   }
 
-  def renderSchema = Action {
+  def schema = Action {
     Ok(SchemaRenderer.renderSchema(SchemaDefinition.schema))
   }
 
