@@ -1,20 +1,17 @@
-FROM adoptopenjdk/openjdk11:slim
+FROM adoptopenjdk/openjdk11:alpine-slim
+
+ENV SBT_VERSION 1.2.8
 
 WORKDIR "/discography"
+
+RUN apk add bash curl
+RUN  curl -fsL -o sbt-$SBT_VERSION.tgz https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tgz && \
+  tar -xf sbt-$SBT_VERSION.tgz -C /usr/local && \
+  ln -s /usr/local/sbt/bin/* /usr/local/bin/
 
 RUN mkdir project
 COPY ["build.sbt", "./"]
 COPY ["project/assembly.sbt", "project/build.properties", "project/plugins.sbt", "./project/"]
-
-ENV SBT_VERSION 1.2.8
-
-RUN curl -L -o sbt-$SBT_VERSION.deb https://dl.bintray.com/sbt/debian/sbt-$SBT_VERSION.deb && \
-  dpkg -i sbt-$SBT_VERSION.deb && \
-  rm sbt-$SBT_VERSION.deb && \
-  apt-get update && \
-  apt-get install sbt && \
-  sbt sbtVersion
-
 RUN sbt update
 
 COPY [".scalafmt.conf", "./"]
@@ -24,7 +21,7 @@ COPY ["public", "public"]
 RUN sbt assembly
 
 
-FROM adoptopenjdk/openjdk11:slim
+FROM adoptopenjdk/openjdk11:alpine-slim
 
 WORKDIR "/discography"
 
