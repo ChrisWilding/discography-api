@@ -25,6 +25,8 @@ $ sbt update
 ## Usage
 
 ```sh
+$ docker-compose up -d postgres
+$ docker-compose run flyway
 $ sbt run
 ```
 
