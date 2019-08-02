@@ -6,7 +6,9 @@ maintainer := "hello@chriswilding.co.uk"
 
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val root = (project in file("."))
+  .enablePlugins(CodegenPlugin)
+  .enablePlugins(PlayScala)
 
 scalaVersion := "2.12.8"
 
@@ -65,7 +67,6 @@ addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
 libraryDependencies ++= Seq(
   guice,
   "com.typesafe.play" %% "play-slick" % "4.0.2",
-  "com.typesafe.play" %% "play-slick-evolutions" % "4.0.2",
   "com.typesafe.slick" %% "slick" % "3.3.2",
   "com.typesafe.slick" %% "slick-hikaricp" % "3.3.2",
   "org.postgresql" % "postgresql" % "42.2.6",
@@ -74,6 +75,13 @@ libraryDependencies ++= Seq(
   "org.sangria-graphql" %% "sangria-relay" % "1.4.2",
   "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % Test
 )
+
+sourceGenerators in Compile += slickCodegen
+slickCodegenDatabaseUrl := "jdbc:postgresql://localhost:5432/discography"
+slickCodegenDatabaseUser := "discography"
+slickCodegenDatabasePassword := "discography"
+slickCodegenOutputPackage := "discography.slick"
+slickCodegenExcludedTables := Seq("flyway_schema_history")
 
 mainClass in assembly := Some("play.core.server.ProdServerStart")
 fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value)

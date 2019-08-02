@@ -1,39 +1,26 @@
 package models
 
-import models.DiscographyData._
+import models.artist.Artist
 import sangria.relay._
 import sangria.schema._
+import models.extensions.DateTimeType
 
 object SchemaDefinition {
   val NodeDefinition(nodeInterface, nodeField, nodesField) =
     Node.definition(
       (globalId: GlobalId, ctx: Context[DiscographyRepo, Unit]) => {
-        if (globalId.typeName == "Album")
-          ctx.ctx.getAlbum(globalId.id)
-        else if (globalId.typeName == "Artist")
-          ctx.ctx.getArtist(globalId.id)
-        else
-          None
+        globalId.typeName match {
+          case "Artist" => ctx.ctx.getArtist(globalId.id.toInt)
+          case _        => None
+        }
       },
-      Node.possibleNodeTypes[DiscographyRepo, Node](AlbumType)
+      Node.possibleNodeTypes[DiscographyRepo, Node](ArtistType)
     )
 
   def idFields[T: Identifiable] = fields[Unit, T](
     Node.globalIdField,
     Field("rawId", StringType, resolve = ctx => implicitly[Identifiable[T]].id(ctx.value))
   )
-
-  val AlbumType: ObjectType[Unit, Album] = ObjectType(
-    "Album",
-    "An album",
-    interfaces[Unit, Album](nodeInterface),
-    idFields[Album] ++ fields[Unit, Album](
-      Field("name", OptionType(StringType), Some("The name of the album."), resolve = _.value.name)
-    )
-  )
-
-  val ConnectionDefinition(_, albumConnection) = Connection
-    .definition[DiscographyRepo, Connection, Option[Album]]("Album", OptionType(AlbumType))
 
   val ArtistType: ObjectType[DiscographyRepo, Artist] = ObjectType(
     "Artist",
@@ -42,38 +29,38 @@ object SchemaDefinition {
     fields[DiscographyRepo, Artist](
       Node.globalIdField[DiscographyRepo, Artist],
       Field(
-        "name",
-        OptionType(StringType),
-        Some("The name of the artist."),
-        resolve = _.value.name
+        "createAt",
+        DateTimeType,
+        resolve = _.value.createdAt
       ),
       Field(
-        "albums",
-        OptionType(albumConnection),
-        arguments = Connection.Args.All,
-        resolve = ctx =>
-          Connection.connectionFromSeq(ctx.value.albums map ctx.ctx.getAlbum, ConnectionArgs(ctx))
+        "updatedAt",
+        DateTimeType,
+        resolve = _.value.updatedAt
+      ),
+      Field(
+        "name",
+        StringType,
+        Some("Name of the artist"),
+        resolve = _.value.name
       )
     )
   )
 
-  val namesArgument = Argument("names", ListInputType(StringType))
+  val idArgument = Argument("id", IDType)
 
   val QueryType = ObjectType(
     "Query",
     fields[DiscographyRepo, Unit](
       Field(
-        "artists",
-        ListType(OptionType(ArtistType)),
-        arguments = namesArgument :: Nil,
-        resolve = ctx => ctx.ctx.getArtists(ctx.arg(namesArgument))
-      ),
-      Field(
-        "christineAndTheQueens",
+        "artist",
         OptionType(ArtistType),
-        resolve = _.ctx.getChristineAndTheQueens
+        arguments = idArgument :: Nil,
+        resolve = ctx => {
+          val maybeGlobalId = GlobalId.fromGlobalId(ctx.arg(idArgument))
+          maybeGlobalId.map(globalId => ctx.ctx.getArtist(globalId.id.toInt)).get
+        }
       ),
-      Field("theXX", OptionType(ArtistType), resolve = _.ctx.getTheXX),
       nodeField,
       nodesField
     )

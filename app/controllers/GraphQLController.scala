@@ -14,7 +14,8 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 @Singleton
-class GraphQLController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class GraphQLController @Inject()(cc: ControllerComponents, discographyRepo: DiscographyRepo)
+    extends AbstractController(cc) {
 
   def graphql(query: String, variables: Option[String], operation: Option[String]) = Action.async {
     executeQuery(query, variables.map(parseVariables), operation)
@@ -48,7 +49,7 @@ class GraphQLController @Inject()(cc: ControllerComponents) extends AbstractCont
           .execute(
             SchemaDefinition.schema,
             queryAst,
-            new DiscographyRepo,
+            discographyRepo,
             operationName = operation,
             variables = variables getOrElse Json.obj()
           )
