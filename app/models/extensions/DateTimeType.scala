@@ -19,8 +19,7 @@ object DateTimeType
         case _                            => Left(DateTimeCoercionViolation)
       },
       coerceUserInput = {
-        case s: String =>
-          Try(OffsetDateTime.parse(s)).toEither.left.map(_ => DateTimeCoercionViolation)
-        case _ => Left(DateTimeCoercionViolation)
+        case s: String => Try(OffsetDateTime.parse(s)).toEither.left.map(_ => DateTimeCoercionViolation)
+        case _         => Left(DateTimeCoercionViolation)
       }
     )
