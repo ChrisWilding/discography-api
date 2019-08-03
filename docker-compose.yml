@@ -2,24 +2,27 @@ version: "3.7"
 
 services:
   api:
-    build: .
+    build:
+      context: .
+      network: host
     environment:
-      DATABASE_URL: "postgres://discography:discography@localhost:5432/discography"
+      DATABASE_URL: "postgres://discography:discography@postgres:5432/discography"
       # This PLAY_HTTP_SECRET_KEY is only used in docker-compose and is different to the one used on
       # Heroku
       PLAY_HTTP_SECRET_KEY: "3oO>nb4L5p4n4kj8Pt^Wjvo0]2Z0oyP1tUtzM[Y1A8<nv3^n>;1i`e`p<]5U7qEX"
+    image: "cw-discography-api"
     links:
       - postgres
     ports:
       - "9000:9000"
+    depends_on:
+      - postgres
 
   flyway:
     image: boxfuse/flyway:5-alpine
     command: -url=jdbc:postgresql://postgres:5432/discography -user=discography -password=discography migrate
     volumes:
       - .:/flyway/sql
-    depends_on:
-      - postgres
 
   postgres:
     environment:
