@@ -1,4 +1,4 @@
-package models.artist
+package models.album
 
 import java.sql.Timestamp
 import java.time.{Instant, OffsetDateTime, ZoneId}
@@ -10,19 +10,24 @@ import slick.jdbc.JdbcProfile
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ArtistDAO @Inject()(dbConfigProviders: DatabaseConfigProvider)(
+class AlbumDAO @Inject()(dbConfigProviders: DatabaseConfigProvider)(
     implicit ec: ExecutionContext
 ) {
   val defaultDbConfig = dbConfigProviders.get[JdbcProfile]
   import defaultDbConfig.profile.api._
 
-  def lookup(id: Int): Future[Option[Artist]] = {
-    val future = defaultDbConfig.db.run(Tables.Artist.filter(_.id === id).result.headOption)
-    future.map(maybeRow => maybeRow.map(artistRowToArtist))
+  def lookup(id: Int): Future[Option[Album]] = {
+    val future = defaultDbConfig.db.run(Tables.Album.filter(_.id === id).result.headOption)
+    future.map(maybeRow => maybeRow.map(albumRowToAlbum))
   }
 
-  private def artistRowToArtist(artistRow: Tables.ArtistRow): Artist = {
-    Artist(artistRow.id, artistRow.createdAt, artistRow.updatedAt, artistRow.name)
+  def getByArtist(artistId: Int): Future[Seq[Album]] = {
+    val future = defaultDbConfig.db.run(Tables.Album.filter(_.artistId === artistId).result)
+    future.map(_.map(albumRowToAlbum))
+  }
+
+  private def albumRowToAlbum(albumRow: Tables.AlbumRow): Album = {
+    Album(albumRow.id, albumRow.createdAt, albumRow.updatedAt, albumRow.artistId, albumRow.name)
   }
 
   implicit def timestampToOffsetDateTime(timestamp: Timestamp): OffsetDateTime = {
