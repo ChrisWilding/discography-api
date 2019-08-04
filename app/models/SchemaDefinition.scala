@@ -51,9 +51,9 @@ object SchemaDefinition {
         ),
         Field(
           "artist",
-          OptionType(ArtistType),
+          ArtistType,
           Some("The artist"),
-          resolve = ctx => ctx.ctx.getArtist(ctx.value.artistId)
+          resolve = ctx => ctx.ctx.getArtist(ctx.value.artistId).map(_.get)
         )
       )
   )
