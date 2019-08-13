@@ -3,6 +3,7 @@ package models
 import models.album.Album
 import models.artist.Artist
 import models.extensions.DateTimeType
+import sangria.execution.deferred.{DeferredResolver, Fetcher, Relation, RelationIds}
 import sangria.relay._
 import sangria.schema._
 
@@ -24,6 +25,13 @@ object SchemaDefinition {
   def idFields[T: Identifiable] = fields[Unit, T](
     Node.globalIdField,
     Field("rawId", StringType, resolve = ctx => implicitly[Identifiable[T]].id(ctx.value))
+  )
+
+  val albumsByArtistRel = Relation[Album, Int]("byArtist", album => Seq(album.artistId))
+
+  val fetchAlbums = Fetcher.relCaching(
+    (ctx: DiscographyRepo, ids: Seq[Int]) => ctx.getAlbumsByIds(ids),
+    (ctx: DiscographyRepo, ids: RelationIds[Album]) => ctx.getAlbumsByArtistIds(ids(albumsByArtistRel))
   )
 
   val AlbumType: ObjectType[DiscographyRepo, Album] = ObjectType(
@@ -86,9 +94,8 @@ object SchemaDefinition {
         ),
         Field(
           "albums",
-          albumConnection,
-          arguments = Connection.Args.All,
-          resolve = ctx => Connection.connectionFromFutureSeq(ctx.ctx.getByArtist(ctx.value.id), ConnectionArgs(ctx))
+          ListType(AlbumType),
+          resolve = ctx => fetchAlbums.deferRelSeq(albumsByArtistRel, ctx.value.id)
         )
       )
   )
@@ -115,11 +122,15 @@ object SchemaDefinition {
         arguments = idArgument :: Nil,
         resolve = ctx => {
           val maybeGlobalId = GlobalId.fromGlobalId(ctx.arg(idArgument))
-          maybeGlobalId.map(globalId => ctx.ctx.getAlbum(globalId.id.toInt)).get
+          maybeGlobalId.map(globalId => fetchAlbums.deferOpt(globalId.id.toInt)).get
         }
       )
     )
   )
 
   val schema = Schema(QueryType, None)
+
+  val deferredResolver = DeferredResolver.fetchers(
+    fetchAlbums
+  )
 }
