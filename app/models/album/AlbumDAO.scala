@@ -21,6 +21,16 @@ class AlbumDAO @Inject()(dbConfigProviders: DatabaseConfigProvider)(
     future.map(maybeRow => maybeRow.map(albumRowToAlbum))
   }
 
+  def lookup(ids: Seq[Int]): Future[Seq[Album]] = {
+    val future = defaultDbConfig.db.run(Tables.Album.filter(_.id inSet ids).result)
+    future.map(maybeRow => maybeRow.map(albumRowToAlbum))
+  }
+
+  def getByArtist(artistIds: Seq[Int]): Future[Seq[Album]] = {
+    val future = defaultDbConfig.db.run(Tables.Album.filter(_.artistId inSet artistIds).result)
+    future.map(rows => rows.map(albumRowToAlbum))
+  }
+
   def getByArtist(artistId: Int): Future[Seq[Album]] = {
     val future = defaultDbConfig.db.run(Tables.Album.filter(_.artistId === artistId).result)
     future.map(_.map(albumRowToAlbum))

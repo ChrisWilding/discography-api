@@ -50,6 +50,7 @@ class GraphQLController @Inject()(cc: ControllerComponents, discographyRepo: Dis
             SchemaDefinition.schema,
             queryAst,
             discographyRepo,
+            deferredResolver = SchemaDefinition.deferredResolver,
             operationName = operation,
             variables = variables getOrElse Json.obj()
           )
