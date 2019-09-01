@@ -1,4 +1,6 @@
 import play.sbt.routes.RoutesKeys
+import slick.codegen.SourceCodeGenerator
+import slick.{ model => m }
 
 name := """discography"""
 organization := "uk.co.chriswilding"
@@ -76,12 +78,24 @@ libraryDependencies ++= Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % Test
 )
 
-sourceGenerators in Compile += slickCodegen
 slickCodegenDatabaseUrl := "jdbc:postgresql://localhost:5432/discography"
 slickCodegenDatabaseUser := "discography"
 slickCodegenDatabasePassword := "discography"
 slickCodegenOutputPackage := "discography.slick"
 slickCodegenExcludedTables := Seq("flyway_schema_history")
+
+slickCodegenCodeGenerator := { (model: m.Model) =>
+  val optionColumns = Set("id", "createdAt", "updatedAt")
+  new SourceCodeGenerator(model) {
+    override def Table = new Table(_) {
+      override def Column = new Column(_) {
+        override def asOption = optionColumns.contains(rawName)
+      }
+    }
+  }
+}
+
+sourceGenerators in Compile += slickCodegen
 
 mainClass in assembly := Some("play.core.server.ProdServerStart")
 fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value)
