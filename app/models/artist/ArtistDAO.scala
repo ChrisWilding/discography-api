@@ -22,7 +22,7 @@ class ArtistDAO @Inject()(dbConfigProviders: DatabaseConfigProvider)(
   }
 
   private def artistRowToArtist(artistRow: Tables.ArtistRow): Artist = {
-    Artist(artistRow.id, artistRow.createdAt, artistRow.updatedAt, artistRow.name)
+    Artist(artistRow.id.get, artistRow.createdAt.get, artistRow.updatedAt.get, artistRow.name)
   }
 
   implicit def timestampToOffsetDateTime(timestamp: Timestamp): OffsetDateTime = {

@@ -37,7 +37,7 @@ class AlbumDAO @Inject()(dbConfigProviders: DatabaseConfigProvider)(
   }
 
   private def albumRowToAlbum(albumRow: Tables.AlbumRow): Album = {
-    Album(albumRow.id, albumRow.createdAt, albumRow.updatedAt, albumRow.artistId, albumRow.name)
+    Album(albumRow.id.get, albumRow.createdAt.get, albumRow.updatedAt.get, albumRow.artistId, albumRow.name)
   }
 
   implicit def timestampToOffsetDateTime(timestamp: Timestamp): OffsetDateTime = {
