@@ -1,6 +1,6 @@
 FROM adoptopenjdk/openjdk11:alpine-slim
 
-ENV SBT_VERSION 1.2.8
+ENV SBT_VERSION 1.3.0
 
 WORKDIR "/discography"
 
