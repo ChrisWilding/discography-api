@@ -12,7 +12,7 @@ lazy val root = (project in file("."))
   .enablePlugins(CodegenPlugin)
   .enablePlugins(PlayScala)
 
-scalaVersion := "2.12.8"
+scalaVersion := "2.12.9"
 
 scalacOptions ++= Seq(
   "-deprecation",
