@@ -8,12 +8,12 @@ services:
   - docker
 before_cache:
   - rm -fv $HOME/.ivy2/.sbt.ivy.lock
-  - find $HOME/.coursier/cache -name "*.lock"               -print -delete
-  - find $HOME/.ivy2/cache     -name "ivydata-*.properties" -print -delete
-  - find $HOME/.sbt            -name "*.lock"               -print -delete
+  - find $HOME/.cache/coursier/v1 -name "*.lock"               -print -delete
+  - find $HOME/.ivy2/cache        -name "ivydata-*.properties" -print -delete
+  - find $HOME/.sbt               -name "*.lock"               -print -delete
 cache:
   directories:
-    - $HOME/.coursier
+    - $HOME/.cache/coursier/v1
     - $HOME/.ivy2/cache
     - $HOME/.sbt
 env:
